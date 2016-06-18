@@ -27,8 +27,15 @@ public class Vehiculo {
     }
 
     protected List obtenerDatosVehículo() {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> datosVehiculo = new ArrayList<>();
+        datosVehiculo.add(marca);
+        datosVehiculo.add(modelo);
+        datosVehiculo.add(confor);
+        datosVehiculo.add(numeroPlazas);
+        datosVehiculo.add(color);
+        datosVehiculo.add(categoria);
+        datosVehiculo.add(matricula);
+        return datosVehiculo;
     }
 
     protected boolean estasDisponible(Date fechaInicio, Date fechaFin) {

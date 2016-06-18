@@ -26,13 +26,13 @@ class Usuario {
     private Map<String, Vehiculo> vehiculos = new HashMap();
 
     Usuario(String nombreUsuario, String contraseña, String direccionCorreo) {
-        this.nombreUsuario = nombreUsuario;
-        this.contraseña = contraseña;
-        this.direccionCorreo = direccionCorreo;
+        crear(nombreUsuario, contraseña, direccionCorreo);
     }
 
     protected void crear(String nombreUsuario, String contraseña, String direccionCorreo) {
-
+        this.nombreUsuario = nombreUsuario;
+        this.contraseña = contraseña;
+        this.direccionCorreo = direccionCorreo;
     }
 
     protected void modificarVisibilidad(boolean visibilidad) {
@@ -44,8 +44,13 @@ class Usuario {
     }
 
     protected List obtenerPlatesQueCumplanRequisitos(String ciudadRecogida, Date fechaInicio, Date fechaFin) {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> datosPAUsuario = new ArrayList<>();
+        datosPAUsuario.add(nombre);
+        datosPAUsuario.add(preferenciaCobro);
+        planesAlquiler.stream().filter((PA) -> (PA.getCiudadRecogida().equals(ciudadRecogida) && PA.getPrimerDiaAlquiler().after(fechaInicio) && PA.getUltimoDiaAlquiler().before(fechaFin))).forEach((PA) -> {
+            datosPAUsuario.add(PA.obtenerDatosPA());
+        });
+        return datosPAUsuario;
     }
 
     protected void definirPlanAlquiler(String matricula, Date fechaInicio, Date fechaFin, String ciudadRecogida) {

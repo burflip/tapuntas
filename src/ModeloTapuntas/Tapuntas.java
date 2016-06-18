@@ -25,16 +25,25 @@ public class Tapuntas {
 
     public void altaRegistro(String nombreUsuario, String contraseña, String direccionCorreo) throws Exception {
        if(usuarios.containsKey(nombreUsuario)) throw new Exception("ya existe un usuario con ese nombre de usuario");
-       usuarios.put(nombreUsuario, new Usuario(nombreUsuario,contraseña,direccionCorreo));
+       Usuario unUsuario = new Usuario(nombreUsuario,contraseña,direccionCorreo);
+       unUsuario.modificarVisibilidad(false);
+       usuarios.put(nombreUsuario, unUsuario);
     }
     
-    public void añadirVehículo(String nombreUsuario, String contraseña, String direccionCorreo) {
+    public void añadirVehículo(String nombreUsuario, String matricula, String modelo, String color, int numeroPlazas, String categoria, String confor) {
         
     }
     
     public List buscarOfertasAlquiler(String ciudadRecogida, Date fechaInicio, Date fechaFin) {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> listaOfertas = new ArrayList<>();
+        Iterator it = usuarios.keySet().iterator();
+        while(it.hasNext()) {
+            String u_key = (String) it.next();
+            Usuario usuario = usuarios.get(u_key);
+            List<Object> datosPAUsuario =  usuario.obtenerPlatesQueCumplanRequisitos(ciudadRecogida, fechaInicio, fechaFin);
+            listaOfertas.add(datosPAUsuario);
+        }
+        return listaOfertas;
     }
     
     public void definirPlanAlquiler(String nombreUsuario, Date fechaInicio, Date fechaFin, String ciudadRecogida) {
