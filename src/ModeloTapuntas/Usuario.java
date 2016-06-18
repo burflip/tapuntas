@@ -20,8 +20,9 @@ class Usuario {
     private boolean pendienteBaja = false;
     private String nombre;
     private String telefono;
-    private String breveDescripciónPersonal;
+    private String breveDescripcionPersonal;
     private TipoTransaccion preferenciaCobro;
+    private boolean perfilDefinido = false;
     private ArrayList<PlanAlquiler> planesAlquiler = new ArrayList();
     private Map<String, Vehiculo> vehiculos = new HashMap();
 
@@ -40,7 +41,9 @@ class Usuario {
     }
 
     protected void nuevoVehículo(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoría, String confor) {
-
+        Vehiculo miVehiculo = new Vehiculo();
+        miVehiculo.crear(matricula, marca, modelo, color, numeroPlazas, categoría, confor);
+        vehiculos.put(matricula, miVehiculo);
     }
 
     protected List obtenerPlatesQueCumplanRequisitos(String ciudadRecogida, Date fechaInicio, Date fechaFin) {
@@ -53,40 +56,76 @@ class Usuario {
         return datosPAUsuario;
     }
 
-    protected void definirPlanAlquiler(String matricula, Date fechaInicio, Date fechaFin, String ciudadRecogida) {
-
+    protected void definirPlanAlquiler(String matricula, Date fechaInicio, Date fechaFin, String ciudadRecogida) throws Exception {
+        Vehiculo vehiculo = buscarVehiculo(matricula);
+        boolean disponible = vehiculo.estasDisponible(fechaInicio, fechaFin);
+        if (!disponible) {
+            throw new Exception("el vehículo ya pertenece a un plan alquiler en esas fechas");
+        }
+        PlanAlquiler miPlanAlquiler = new PlanAlquiler();
+        miPlanAlquiler.crear(vehiculo, fechaInicio, fechaFin, ciudadRecogida);
+        vehiculo.incluirPlanAlquiler(miPlanAlquiler);
     }
 
-    protected void eliminarVehículo(String matricula) {
-
+    protected void eliminarVehículo(String matricula) throws Exception {
+        Vehiculo vehiculo = buscarVehiculo(matricula);
+        boolean alquilado = vehiculo.comprobarEstadoAlquileres();
+        if (!alquilado) {
+            vehiculo.eliminarVehiculoAlquileres();
+            vehiculos.remove(vehiculo.obtenerMatrícula());
+        } else {
+            throw new Exception("el vehículo no se puede eliminar, tiene vigentes alquileres o viajes");
+        }
     }
 
     protected void introducirPerfil(String nombre, String telefono, String breveDescripcion, TipoTransaccion preferenciaCobro) {
-
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.breveDescripcionPersonal = breveDescripcion;
+        this.preferenciaCobro = preferenciaCobro;
+        this.modificarVisibilidad(true);
+        this.perfilDefinido = true;
     }
 
     protected List obtenerPlanesAlquiler() {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> misPlanesAlquiler = new ArrayList<>();
+        for(PlanAlquiler pa : planesAlquiler) {
+            if(!pa.isVisible() && pa.vigente()){
+                List<Object> datosPlanAlquiler = new ArrayList<>(pa.obtenerDatosPlanAlquiler());
+                misPlanesAlquiler.add(datosPlanAlquiler);
+            }
+        }
+        return misPlanesAlquiler;
     }
 
     protected List consultarPerfil() {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> infoPerfil = new ArrayList<>();
+        infoPerfil.add(nombre);
+        infoPerfil.add(telefono);
+        infoPerfil.add(breveDescripcionPersonal);
+        infoPerfil.add(visibilidad);
+        return infoPerfil;
     }
-    
-    protected void ofertarPlanALquiler(Date fechaInicio, String matricula) {
-        
+
+    protected void ofertarPlanAlquiler(Date fechaInicio, String matricula) {
+        for(PlanAlquiler pa : planesAlquiler) {
+            if(pa.getVehiculo().obtenerMatrícula().equals(matricula) && fechaInicio == pa.getPrimerDiaAlquiler())
+                pa.modificarVisibilidad(true); break;
+        }
     }
-    
-    private Vehiculo buscarVehículo(String matricula) {
-        Vehiculo v = new Vehiculo();
-        return v;
+
+    protected Vehiculo buscarVehiculo(String matricula) {
+        return vehiculos.get(matricula);
     }
-    
-    private PlanAlquiler buscarPlanAlquiler(Date fechaInicio, String matricula){
+
+    private PlanAlquiler buscarPlanAlquiler(Date fechaInicio, String matricula) {
         PlanAlquiler p = new PlanAlquiler();
         return p;
     }
+
+    public boolean isPerfilDefinido() {
+        return perfilDefinido;
+    }
     
+
 }

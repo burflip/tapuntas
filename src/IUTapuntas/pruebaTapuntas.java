@@ -62,7 +62,7 @@ public class pruebaTapuntas {
                 switch(opcion){
                     case 10: //incluir un nuevo usuario en el sistema 
                                             
-                        System.out.print("Nombre de Usaurio:");
+                        System.out.print("Nombre de Usuario:");
                         String nombreUsuario =in.nextLine();
                                        
                         System.out.print("Clave:");
@@ -76,7 +76,7 @@ public class pruebaTapuntas {
                     break;  
                     
                     case 11:/*Ver usuarios del sistema */
-                                                                     
+                        
                     break;
                     
                     case 12:/*Incluir Perfil */

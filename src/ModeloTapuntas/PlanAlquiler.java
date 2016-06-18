@@ -53,19 +53,39 @@ public class PlanAlquiler {
     }
 
     protected void crear(Vehiculo unVehiculo, Date fechaInicio, Date fechaFin, String ciudadRecogida) {
-
+        this.vehiculo = unVehiculo;
+        this.primerDiaAlquiler = fechaInicio;
+        this.ultimoDiaAlquiler = fechaFin;
+        this.ciudadRecogida = ciudadRecogida;
     }
 
     protected void eliminarVehiculo() {
-
+        this.vehiculo = null;
     }
 
     protected List obtenerDatosPlanAlquiler() {
-        LinkedList a = new LinkedList();
-        return a;
+        List<Object> datosPA = new ArrayList<>();
+        String matricula = vehiculo.obtenerMatrícula();
+        datosPA.add(matricula);
+        datosPA.add(primerDiaAlquiler);
+        datosPA.add(ultimoDiaAlquiler);
+        datosPA.add(costeAlquilerAlDia);
+        datosPA.add(ciudadRecogida);
+        return datosPA;
     }
 
     protected void modificarVisibilidad(boolean visible) {
         this.visible = visible;
+    }
+    
+    protected boolean poseeAlquileresAceptados()
+    {
+        return false;
+    }
+    
+    protected boolean vigente()
+    {
+        Date fechaActual = new Date();
+        return fechaActual.before(this.primerDiaAlquiler);
     }
 }

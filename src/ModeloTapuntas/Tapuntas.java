@@ -30,8 +30,15 @@ public class Tapuntas {
        usuarios.put(nombreUsuario, unUsuario);
     }
     
-    public void añadirVehículo(String nombreUsuario, String matricula, String modelo, String color, int numeroPlazas, String categoria, String confor) {
-        
+    public void añadirVehículo(String nombreUsuario, String matricula, String marca, String modelo, String color, int numeroPlazas, String categoria, String confor) throws Exception {
+        boolean existe = false;
+        for(Map.Entry<String,Usuario> entry : usuarios.entrySet()) {
+            if(entry.getValue().buscarVehiculo(matricula) != null)
+                existe = true;
+        }
+        if (existe) throw new Exception("ya existe otro vehículo en el sistema con esa matrícula");
+        Usuario usuario = this.buscarUsuario(nombreUsuario);
+        usuario.nuevoVehículo(matricula, marca, modelo, color, numeroPlazas, categoria, confor);
     }
     
     public List buscarOfertasAlquiler(String ciudadRecogida, Date fechaInicio, Date fechaFin) {
@@ -46,39 +53,47 @@ public class Tapuntas {
         return listaOfertas;
     }
     
-    public void definirPlanAlquiler(String nombreUsuario, Date fechaInicio, Date fechaFin, String ciudadRecogida) {
-        
+    public void definirPlanAlquiler(String nombreUsuario, String matricula, Date fechaInicio, Date fechaFin, String ciudadRecogida) throws Exception {
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        usuario.definirPlanAlquiler(matricula, fechaInicio, fechaFin, ciudadRecogida);
     }
     
-    public void eliminarVehículoPropietario(String nombreUsuario, String matricula) {
-        
+    public void eliminarVehículo(String nombreUsuario, String matricula) throws Exception {
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        usuario.eliminarVehículo(matricula);
     }
     
-    public void introducirPerfil(String nombreUsuario, String nombre, String telefono, String breveDescripcion) {
-        
+    public void introducirPerfil(String nombreUsuario, String nombre, String telefono, String breveDescripcion, TipoTransaccion preferenciaCobro) throws Exception {
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        if(usuario.isPerfilDefinido()) throw new Exception("el usuario ya tiene un perfil definido");
+        usuario.introducirPerfil(nombre, telefono, breveDescripcion, preferenciaCobro);
     }
     
     public List obtenerPlanesAlquiler(String nombreUsuario) {
-        LinkedList a = new LinkedList();
-        return a;
+        List<PlanAlquiler> misPlanesAlquiler= new ArrayList<>();
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        misPlanesAlquiler = usuario.obtenerPlanesAlquiler();
+        return misPlanesAlquiler;
     }
     
     public List consultarPerfil(String nombreUsuario){
-        LinkedList a = new LinkedList();
-        return a;
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        List<Object> infoPerfil;
+        infoPerfil = new ArrayList<>(usuario.consultarPerfil());
+        return infoPerfil;
     }
     
     public void ofertarPlanAlquiler(String nombreUsuario, Date fechaInicio, String matricula) {
-        
+        Usuario usuario = buscarUsuario(nombreUsuario);
+        usuario.ofertarPlanAlquiler(fechaInicio, matricula);
     }
     
     private boolean existeUsuario(String nombreUsuario) {
-        return true;
+        return (usuarios.get(nombreUsuario) != null);
     }
     
     private Usuario buscarUsuario(String nombreUsuario) {
-        Usuario a = new Usuario("Pepe", "pepesecret", "pepe@gmail.com");
-        return a;
+        return usuarios.get(nombreUsuario);
     }
     
     private void ordenarOfertas(ArrayList<String> listaOfertas) {
