@@ -16,13 +16,22 @@ public class Tapuntas {
     private Tapuntas() {
     }
 
-    // Este método mo está bien, está hecho para probar, tenéis que implementar el singleton
     public static Tapuntas getInstance() {
-        if (instance == null) {
-            instance = new Tapuntas();
-        }
-
+        if (instance == null) createInstance();
         return instance;
+    }
+    
+    private static void createInstance() {
+        if (instance == null) {
+            synchronized(Tapuntas.class) {
+                if (instance == null) instance = new Tapuntas();
+            }
+        }
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+    	throw new CloneNotSupportedException(); 
     }
 
     public void altaRegistro(String nombreUsuario, String contraseña, String direccionCorreo) throws Exception {
@@ -49,15 +58,13 @@ public class Tapuntas {
     }
 
     public List buscarOfertasAlquiler(String ciudadRecogida, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
-        List<Object> listaOfertas = new ArrayList<>();
-        Iterator it = usuarios.keySet().iterator();
-        while (it.hasNext()) {
-            String u_key = (String) it.next();
+        List<List<Object>> listaOfertas = new ArrayList<>();
+        for (String u_key : usuarios.keySet()) {
             Usuario usuario = usuarios.get(u_key);
             List<Object> datosPAUsuario = usuario.obtenerPlanesQueCumplanRequisitos(ciudadRecogida, fechaInicio, fechaFin);
             listaOfertas.add(datosPAUsuario);
         }
-        return listaOfertas;
+        return ordenarOfertas(listaOfertas);
     }
 
     public void definirPlanAlquiler(String nombreUsuario, String matricula, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) throws Exception {
@@ -81,7 +88,7 @@ public class Tapuntas {
     public List obtenerPlanesAlquiler(String nombreUsuario) {
         List<PlanAlquiler> misPlanesAlquiler;
         Usuario usuario = buscarUsuario(nombreUsuario);
-        misPlanesAlquiler = usuario.obtenerPlanesAlquiler();
+        misPlanesAlquiler = new ArrayList<>(usuario.obtenerPlanesAlquiler());
         return misPlanesAlquiler;
     }
 
@@ -110,49 +117,47 @@ public class Tapuntas {
         return buscarUsuario(nombreUsuario).tengoVehiculos();
     }
 
-    private void ordenarOfertas(ArrayList<String> listaOfertas) {
-        //Todo ordenar ofertas
+    private List ordenarOfertas(List<List<Object>> listaOfertas) {
+            Collections.sort(listaOfertas, (o1, o2) -> ((String) o1.get(0)).compareTo(((String) o2.get(0))));
+            return listaOfertas;
     }
 
     private boolean existeVehículo(String matricula) {
         return true;
     }
 
-    /**
-     * Estas funciones
-     */
     public List obtenerUsuarios() {
         List<Object> datosUsuarios = new ArrayList<>();
         usuarios.entrySet().stream().forEach((usuario) -> {
             List<Object> datosUsuario = new ArrayList<>();
             ArrayList<Object> titulos = new ArrayList<>();
             ArrayList<Object> elems = new ArrayList<>();
-            
+
             titulos.add("Nombre de usuario");
             titulos.add("Teléfono");
             titulos.add("Contraseña");
             elems.add(usuario.getKey());
             elems.add(usuario.getValue().getDireccionCorreo());
             elems.add(usuario.getValue().getContraseña());
-            
+
             datosUsuario.add(titulos);
             datosUsuario.add(elems);
             datosUsuarios.add(datosUsuario);
         });
-        
+
         return datosUsuarios;
     }
 
     public List obtenerVehiculosUsuario(String nombreUsuario) {
         Usuario usuario = buscarUsuario(nombreUsuario);
         List<Object> vehiculosUsuario = new ArrayList<>();
-        
+
         Map<String, Vehiculo> vUsuarios = usuario.getVehiculos();
         vUsuarios.entrySet().stream().forEach((vehiculo) -> {
             List<Object> datosVehiculo = new ArrayList<>(vehiculo.getValue().obtenerDatosVehiculo());
             vehiculosUsuario.add(datosVehiculo);
         });
-        
+
         return vehiculosUsuario;
     }
 

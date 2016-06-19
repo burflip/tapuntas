@@ -71,9 +71,18 @@ class Usuario {
         List<Object> datosPAUsuario = new ArrayList<>();
         datosPAUsuario.add(nombre);
         datosPAUsuario.add(preferenciaCobro);
-        planesAlquiler.stream().filter((PA) -> (PA.getCiudadRecogida().equals(ciudadRecogida) && PA.getPrimerDiaAlquiler().after(fechaInicio) && PA.getUltimoDiaAlquiler().before(fechaFin))).forEach((PA) -> {
-            datosPAUsuario.add(PA.obtenerDatosPA());
-        });
+        boolean hay_ofertas = false;
+        for(PlanAlquiler PA : planesAlquiler) {
+            //System.out.println("Primer dia: " + PA.getPrimerDiaAlquiler().toString() + " FechaInicio: " + fechaInicio.toString() + " Ultimo dia:"+PA.getUltimoDiaAlquiler().toString()+ " Fecha fin:"+fechaFin.toString());
+            //System.out.println(PA.getCiudadRecogida().equals(ciudadRecogida) + " && " + PA.getPrimerDiaAlquiler().after(fechaInicio) +" && "+ PA.getUltimoDiaAlquiler().before(fechaFin));
+            if(PA.getCiudadRecogida().equals(ciudadRecogida) && PA.getPrimerDiaAlquiler().after(fechaInicio) && PA.getUltimoDiaAlquiler().before(fechaFin))
+            {
+                //System.out.println("added");
+                datosPAUsuario.add(PA.obtenerDatosPA());
+                hay_ofertas = true;
+            }
+        }
+        if(!hay_ofertas) datosPAUsuario = new ArrayList<>();
         return datosPAUsuario;
     }
 
@@ -85,6 +94,7 @@ class Usuario {
         }
         PlanAlquiler miPlanAlquiler = new PlanAlquiler();
         miPlanAlquiler.crear(vehiculo, fechaInicio, fechaFin, ciudadRecogida);
+        planesAlquiler.add(miPlanAlquiler);
         vehiculo.incluirPlanAlquiler(miPlanAlquiler);
     }
 
@@ -110,7 +120,9 @@ class Usuario {
 
     protected List obtenerPlanesAlquiler() {
         List<Object> misPlanesAlquiler = new ArrayList<>();
+        //System.out.println("PLANES: "+planesAlquiler);
         for (PlanAlquiler pa : planesAlquiler) {
+            //System.out.println("isVisible:" +pa.isVisible()+ " vigencia: "+ pa.vigente());
             if (!pa.isVisible() && pa.vigente()) {
                 List<Object> datosPlanAlquiler = new ArrayList<>(pa.obtenerDatosPlanAlquiler());
                 misPlanesAlquiler.add(datosPlanAlquiler);

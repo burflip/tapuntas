@@ -25,7 +25,24 @@ public class pruebaTapuntas {
 
         // Definir la variable que nos permite leer String desde teclado
         final Scanner in = new Scanner(System.in);
+        String input;
         int opcion = 0;
+        /**
+         * ----------------------------------------------------------------------
+         * INSERCIÓN DE DATOS DE PRUEBA Comentar las siguientes líneas para no
+         * insertar los datos de prueba
+         * ----------------------------------------------------------------------
+         */
+        try {
+            insertarDatosDePrueba();
+        } catch (Exception ex) {
+            System.err.println("Se ha producido la siguiente excepcion: " + ex);
+        }
+        /**
+         * ----------------------------------------------------------------------
+         * FIN INSERCIÓN DE DATOS DE PRUEBA
+         * ----------------------------------------------------------------------
+         */
         do {
             try { // tratamiento de las excepciones. Bloque try en el que se puede producir una excepción y la capturamos
 
@@ -77,9 +94,9 @@ public class pruebaTapuntas {
 
                     case 11:/*Ver usuarios del sistema */
                         List<ArrayList<Object>> usuarios = aViajar.obtenerUsuarios();
-                        System.out.println("Actualmente tenemos " + usuarios.size() + " usuarios.");
+                        System.out.println("Actualmente tenemos " + usuarios.size() + " usuario" + ((usuarios.size() > 1) ? "s" : "") + ".");
                         usuarios.stream().forEach((usuario) -> {
-                            imprimirLista(usuario, "");
+                            imprimirLista(usuario);
                         });
                         break;
 
@@ -158,6 +175,7 @@ public class pruebaTapuntas {
                         String confor = in.nextLine();
 
                         aViajar.añadirVehículo(nombreUsuario, matricula, marca, modelo, color, numeroPlazas, categoria, confor);
+                        System.out.println("++++++  Operación realizada con éxito ++++++");
 
                         break;
 
@@ -166,7 +184,7 @@ public class pruebaTapuntas {
                         System.out.print("Nombre de Usuario:");
                         nombreUsuario = in.nextLine();
                         List<ArrayList<Object>> vehiculosUsuario = aViajar.obtenerVehiculosUsuario(nombreUsuario);
-                        System.out.println("El usuario " + nombreUsuario + " tiene " + vehiculosUsuario.size() + " vehiculos.");
+                        System.out.println("El usuario " + nombreUsuario + " tiene " + vehiculosUsuario.size() + " vehiculo" + ((vehiculosUsuario.size() > 1) ? "s" : "") + " .");
                         vehiculosUsuario.stream().forEach((vehiculo) -> {
                             imprimirLista(vehiculo, "");
                         });
@@ -179,7 +197,7 @@ public class pruebaTapuntas {
 
                         if (aViajar.usuarioTieneVehiculos(nombreUsuario)) {
                             System.out.print("El usuario posee los siguientes vehículos:");
-                            imprimirMatriculasUsuario(aViajar, nombreUsuario);
+                            imprimirMatriculasUsuario(nombreUsuario);
 
                             System.out.print("Matrícula:");
                             matricula = in.nextLine();
@@ -199,7 +217,7 @@ public class pruebaTapuntas {
 
                         if (aViajar.usuarioTieneVehiculos(nombreUsuario)) {
                             System.out.print("El usuario posee los siguientes vehículos:");
-                            imprimirMatriculasUsuario(aViajar, nombreUsuario);
+                            imprimirMatriculasUsuario(nombreUsuario);
 
                             System.out.print("Matrícula:");
                             matricula = in.nextLine();
@@ -218,10 +236,11 @@ public class pruebaTapuntas {
                             System.out.print("Dia : ");
                             int diaFinal = Integer.parseInt(in.nextLine());
                             System.out.print("Mes (" + mesInicio + ") : ");
-                            String input = in.nextLine();
-                            int mesFinal = (input.equals("")) ? mesInicio : Integer.parseInt(in.nextLine());
+                            input = in.nextLine();
+                            int mesFinal = (input.equals("")) ? mesInicio : Integer.parseInt(input);
                             System.out.print("Año (" + añoInicio + "): ");
-                            int añoFinal = (input.equals("")) ? añoInicio : Integer.parseInt(in.nextLine());
+                            input = in.nextLine();
+                            int añoFinal = (input.equals("")) ? añoInicio : Integer.parseInt(input);
 
                             GregorianCalendar fechaFin = new GregorianCalendar(añoFinal, mesFinal - 1, diaFinal);
 
@@ -240,11 +259,12 @@ public class pruebaTapuntas {
                         System.out.print("Nombre de Usuario:");
                         nombreUsuario = in.nextLine();
 
-                        List<Object> planesAlquiler = aViajar.obtenerPlanesAlquiler(nombreUsuario);
-                        imprimirLista(planesAlquiler, "Planes de alquiler de '" + nombreUsuario + "'");
-
+                        List<ArrayList<Object>> planesAlquiler = aViajar.obtenerPlanesAlquiler(nombreUsuario);
+                        System.out.println("El usuario '" + nombreUsuario + "' tiene " + planesAlquiler.size() + "plane" + ((planesAlquiler.size() > 1) ? "s" : "") + " de alquiler.");
+                        planesAlquiler.stream().forEach((datosPlanAlquiler) -> {
+                            imprimirLista(datosPlanAlquiler);
+                        });
                         break;
-
                     case 32:
                         /* Ofertar un plan de alquiler */
 
@@ -253,12 +273,12 @@ public class pruebaTapuntas {
 
                         if (aViajar.usuarioTieneVehiculos(nombreUsuario)) {
                             System.out.print("El usuario posee los siguientes vehículos:");
-                            imprimirMatriculasUsuario(aViajar, nombreUsuario);
+                            imprimirMatriculasUsuario(nombreUsuario);
 
                             System.out.print("Matrícula:");
                             matricula = in.nextLine();
 
-                            System.out.print("Fecha inicio----------------");
+                            System.out.println("Fecha inicio----------------");
                             System.out.print("Dia : ");
                             int diaInicio = Integer.parseInt(in.nextLine());
                             System.out.print("Mes : ");
@@ -280,7 +300,7 @@ public class pruebaTapuntas {
                         System.out.print("Ciudad recogida:");
                         String ciudadRecogida = in.nextLine();
 
-                        System.out.print("Fecha inicio----------------");
+                        System.out.println("Fecha inicio----------------");
                         System.out.print("Dia : ");
                         int diaInicio = Integer.parseInt(in.nextLine());
                         System.out.print("Mes : ");
@@ -290,18 +310,37 @@ public class pruebaTapuntas {
 
                         GregorianCalendar fechaInicio = new GregorianCalendar(añoInicio, mesInicio - 1, diaInicio);
 
-                        System.out.print("Fecha fin----------------");
+                        System.out.println("Fecha fin----------------");
                         System.out.print("Dia : ");
                         int diaFinal = Integer.parseInt(in.nextLine());
                         System.out.print("Mes (" + mesInicio + ") : ");
-                        String input = in.nextLine();
-                        int mesFinal = (input.equals("")) ? mesInicio : Integer.parseInt(in.nextLine());
+                        input = in.nextLine();
+                        int mesFinal = (input.equals("")) ? mesInicio : Integer.parseInt(input);
                         System.out.print("Año (" + añoInicio + "): ");
-                        int añoFinal = (input.equals("")) ? añoInicio : Integer.parseInt(in.nextLine());
+                        input = in.nextLine();
+                        int añoFinal = (input.equals("")) ? añoInicio : Integer.parseInt(input);
 
                         GregorianCalendar fechaFin = new GregorianCalendar(añoFinal, mesFinal - 1, diaFinal);
 
-                        aViajar.buscarOfertasAlquiler(ciudadRecogida, fechaInicio, fechaFin);
+                        List<List<Object>> ofertas = aViajar.buscarOfertasAlquiler(ciudadRecogida, fechaInicio, fechaFin);
+                        if (ofertas.isEmpty()) {
+                            System.out.println("No hay ofertas disponibles para las fechas seleccionadas.");
+                        } else {
+                            System.out.println("Ofertas disponibles:");
+                            System.out.println("----------------------------");
+                            for (List<Object> oferta : ofertas) {
+                                for (Object datos : oferta) {
+                                    if (datos.getClass().equals(ArrayList.class)) {
+                                        System.out.println("Coste alquiler:" + ((ArrayList) datos).get(0));
+                                        System.out.print("Datos del vehículo:");
+                                        imprimirLista((ArrayList<Object>) ((ArrayList) datos).get(1));
+                                    } else {
+                                        System.out.println(datos);
+                                    }
+                                }
+                                System.out.println("----------------------------");
+                            }
+                        }
 
                         break;
 
@@ -321,6 +360,10 @@ public class pruebaTapuntas {
         System.exit(0);
     }
 
+    private static void imprimirLista(List lista) {
+        imprimirLista(lista, "");
+    }
+
     private static void imprimirLista(List lista, String titulo) {
         Iterator it_titulos = ((ArrayList<Object>) lista.get(0)).iterator();
         Iterator it_elems = ((ArrayList<Object>) lista.get(1)).iterator();
@@ -335,12 +378,25 @@ public class pruebaTapuntas {
         }
         System.out.println("-------------" + slices + "---------------");
     }
-    
-    private static void imprimirMatriculasUsuario(Tapuntas aViajar, String nombreUsuario) {
+
+    private static void imprimirMatriculasUsuario(String nombreUsuario) {
+        Tapuntas aViajar = Tapuntas.getInstance();
         ArrayList<String> matriculas = new ArrayList<>(aViajar.obtenerMatriculasUsuario(nombreUsuario));
+        System.out.println("\n----------------------------");
+        matriculas.stream().forEach((matricula) -> {
+            System.out.println(matricula);
+        });
         System.out.println("----------------------------");
-        matriculas.stream().forEach((matricula) -> { System.out.println(matricula); });
-        System.out.println("----------------------------");
+    }
+
+    private static void insertarDatosDePrueba() throws Exception {
+        Tapuntas aViajar = Tapuntas.getInstance();
+        String nombreUsuario = "antony", matricula = "6458HVN";
+        aViajar.altaRegistro(nombreUsuario, "clavesecreta", "correo@gmail.com");
+        aViajar.introducirPerfil(nombreUsuario, "Antonio Martín Garzón", "658628314", "Soy buena gente.", TipoTransaccion.TARJETA);
+        aViajar.añadirVehículo(nombreUsuario, matricula, "Renault", "Megane", "Azul", 5, "Sedán", "Alto");
+        aViajar.definirPlanAlquiler(nombreUsuario, matricula, new GregorianCalendar(2016, 5, 20), new GregorianCalendar(2016, 5, 30), "Granada");
+        aViajar.ofertarPlanAlquiler(nombreUsuario, new GregorianCalendar(20, 6, 2016), matricula);
     }
 
 }

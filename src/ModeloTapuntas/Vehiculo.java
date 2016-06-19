@@ -56,7 +56,7 @@ public class Vehiculo {
     }
 
     protected boolean estasDisponible(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
-        boolean disponible = false;
+        boolean disponible = true;
         for(PlanAlquiler pa : planesAlquiler) {
             if((fechaInicio.after(pa.getPrimerDiaAlquiler()) && fechaInicio.before(pa.getUltimoDiaAlquiler())) ||
                     (fechaInicio.before(pa.getPrimerDiaAlquiler()) && fechaFin.after(pa.getPrimerDiaAlquiler())))

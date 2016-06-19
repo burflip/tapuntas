@@ -5,6 +5,8 @@
  */
 package ModeloTapuntas;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -68,14 +70,17 @@ public class PlanAlquiler {
         String matricula = vehiculo.obtenerMatrícula();
         ArrayList<Object> titulos = new ArrayList<>();
         ArrayList<Object> elems = new ArrayList<>();
+        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        String fechaInicio = formatoFecha.format(primerDiaAlquiler.getTime());
+        String fechaFin = formatoFecha.format(ultimoDiaAlquiler.getTime());
         titulos.add("Matrícula");
         titulos.add("Primer dia alquiler");
         titulos.add("Ultimo dia alquiler");
         titulos.add("Coste de alquiler al día");
         titulos.add("Ciudad de recogida");
         elems.add(matricula);
-        elems.add(primerDiaAlquiler);
-        elems.add(ultimoDiaAlquiler);
+        elems.add(fechaInicio);
+        elems.add(fechaFin);
         elems.add(costeAlquilerAlDia);
         elems.add(ciudadRecogida);
         datosPA.add(titulos);
@@ -94,7 +99,10 @@ public class PlanAlquiler {
     
     protected boolean vigente()
     {
+        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); //Da formato al día String
+        String fechaString = formatoFecha.format(this.ultimoDiaAlquiler.getTime());
         GregorianCalendar fechaActual = new GregorianCalendar();
-        return fechaActual.before(this.primerDiaAlquiler);
+        //Debug: System.out.println("Fecha actual: "+fechaActual+" Fecha ult dia:" + fechaString);
+        return fechaActual.before(this.ultimoDiaAlquiler);
     }
 }
