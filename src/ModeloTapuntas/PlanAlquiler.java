@@ -4,10 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/**
- *
- * @author valentin
- */
 public class PlanAlquiler {
 
     private boolean visible;
@@ -48,7 +44,7 @@ public class PlanAlquiler {
      * @return Los datos del Plan de Alquiler en formato imprimible por
      * imprimirLista
      */
-    protected List obtenerDatosPA() {
+    List obtenerDatosPA() {
         List<Object> datosPA = new ArrayList<>();
         datosPA.add(costeAlquilerAlDia);
         datosPA.add(primerDiaAlquiler);
@@ -66,7 +62,7 @@ public class PlanAlquiler {
      * @param fechaFin Fecha de fin del plan
      * @param ciudadRecogida Ciudad de recogida del plan
      */
-    protected void crear(Vehiculo unVehiculo, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) {
+    void crear(Vehiculo unVehiculo, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) {
         this.vehiculo = unVehiculo;
         this.primerDiaAlquiler = fechaInicio;
         this.ultimoDiaAlquiler = fechaFin;
@@ -76,7 +72,7 @@ public class PlanAlquiler {
     /**
      * Elimina el vehículo del plan
      */
-    protected void eliminarVehiculo() {
+    void eliminarVehiculo() {
         this.vehiculo = null;
     }
 
@@ -86,7 +82,7 @@ public class PlanAlquiler {
      * @return Los datos del Plan de Alquiler en formato imprimible por
      * imprimirLista
      */
-    protected List obtenerDatosPlanAlquiler() {
+    List obtenerDatosPlanAlquiler() {
         List<List<Object>> datosPA = new ArrayList<>();
         String matricula = vehiculo.obtenerMatrícula();
         ArrayList<Object> titulos = new ArrayList<>();
@@ -114,7 +110,7 @@ public class PlanAlquiler {
      *
      * @param visible Si queremos que sea visible true e invisible false
      */
-    protected void modificarVisibilidad(boolean visible) {
+    void modificarVisibilidad(boolean visible) {
         this.visible = visible;
     }
 
@@ -124,7 +120,7 @@ public class PlanAlquiler {
      *
      * @return false
      */
-    protected boolean poseeAlquileresAceptados() {
+    boolean poseeAlquileresAceptados() {
         return false;
     }
 
@@ -134,7 +130,7 @@ public class PlanAlquiler {
      *
      * @return true si aún está vigente y false si no
      */
-    protected boolean vigente() {
+    boolean vigente() {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); //Da formato al día String
         String fechaString = formatoFecha.format(this.ultimoDiaAlquiler.getTime());
         GregorianCalendar fechaActual = new GregorianCalendar();

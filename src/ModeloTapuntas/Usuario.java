@@ -1,6 +1,7 @@
 package ModeloTapuntas;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -71,7 +72,7 @@ class Usuario {
      * @param contraseña Contraseña del nuevo usuario
      * @param direccionCorreo Email del nuevo usuario
      */
-    protected final void crear(String nombreUsuario, String contraseña, String direccionCorreo) {
+    final void crear(String nombreUsuario, String contraseña, String direccionCorreo) {
         this.nombreUsuario = nombreUsuario;
         this.contraseña = hash(contraseña);
         this.direccionCorreo = direccionCorreo;
@@ -86,7 +87,7 @@ class Usuario {
      * @param noHash True si no queremos encriptar la contraseña y false si sí
      * la queremos encriptada
      */
-    protected final void crear(String nombreUsuario, String contraseña, String direccionCorreo, boolean noHash) {
+    final void crear(String nombreUsuario, String contraseña, String direccionCorreo, boolean noHash) {
         this.nombreUsuario = nombreUsuario;
         this.contraseña = (noHash) ? contraseña : hash(contraseña);
         this.direccionCorreo = direccionCorreo;
@@ -100,7 +101,7 @@ class Usuario {
      * @param visibilidad True si queremos que el usuario sea visible y false si
      * no.
      */
-    protected void modificarVisibilidad(boolean visibilidad) {
+    void modificarVisibilidad(boolean visibilidad) {
         this.visibilidad = visibilidad;
     }
 
@@ -116,7 +117,7 @@ class Usuario {
      * @param categoria Categoría del vehículo
      * @param confor Confort del vehículo
      */
-    protected void nuevoVehículo(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoría, String confor) {
+    void nuevoVehículo(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoría, String confor) {
         Vehiculo miVehiculo = new Vehiculo();
         miVehiculo.crear(matricula, marca, modelo, color, numeroPlazas, categoría, confor);
         vehiculos.put(matricula, miVehiculo);
@@ -135,7 +136,7 @@ class Usuario {
      * @param fechaFin Fecha de fin de la búsqueda, del tipo GregorianCalendar
      * @return Lista de Planes de alquiler del usuario junto con sus datos
      */
-    protected List obtenerPlanesQueCumplanRequisitos(String ciudadRecogida, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+    List obtenerPlanesQueCumplanRequisitos(String ciudadRecogida, GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         List<Object> datosPAUsuario = new ArrayList<>();
         datosPAUsuario.add(nombre);
         datosPAUsuario.add(preferenciaCobro);
@@ -166,7 +167,7 @@ class Usuario {
      * @param ciudadRecogida Ciudad de recogida del plan
      * @throws Exception
      */
-    protected void definirPlanAlquiler(String matricula, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) throws Exception {
+    void definirPlanAlquiler(String matricula, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) throws Exception {
         Vehiculo vehiculo = buscarVehiculo(matricula);
         boolean disponible = vehiculo.estasDisponible(fechaInicio, fechaFin);
         if (!disponible) {
@@ -184,7 +185,7 @@ class Usuario {
      * @param matricula Matrícula del vehículo
      * @throws Exception El vehículo tiene planes de alquiler asociados
      */
-    protected void eliminarVehículo(String matricula) throws Exception {
+    void eliminarVehículo(String matricula) throws Exception {
         Vehiculo vehiculo = buscarVehiculo(matricula);
         boolean alquilado = vehiculo.comprobarEstadoAlquileres();
         if (!alquilado) {
@@ -203,7 +204,7 @@ class Usuario {
      * @param breveDescripcion Breve descripción del usuario
      * @param preferenciaCobro Preferencia de cobro de tipo TipoTransaccion
      */
-    protected void introducirPerfil(String nombre, String telefono, String breveDescripcion, TipoTransaccion preferenciaCobro) {
+    void introducirPerfil(String nombre, String telefono, String breveDescripcion, TipoTransaccion preferenciaCobro) {
         this.nombre = nombre;
         this.telefono = telefono;
         this.breveDescripcionPersonal = breveDescripcion;
@@ -218,7 +219,7 @@ class Usuario {
      * @return misPlanesAlquiler Lista de PlanAlquiler con los planes del
      * usuario
      */
-    protected List obtenerPlanesAlquiler() {
+    List obtenerPlanesAlquiler() {
         List<Object> misPlanesAlquiler = new ArrayList<>();
         //System.out.println("PLANES: "+planesAlquiler);
         for (PlanAlquiler pa : planesAlquiler) {
@@ -240,7 +241,7 @@ class Usuario {
      * imprimirLista
      * @throws Exception
      */
-    protected List consultarPerfil() throws Exception {
+    List consultarPerfil() throws Exception {
         if (!this.perfilDefinido) {
             throw new Exception("Este usuario no tiene un perfil definido");
         }
@@ -268,7 +269,7 @@ class Usuario {
      * @param fechaInicio Identificador formado por fechaInicio+matricula
      * @param matricula Identificador formado por fechaInicio+matricula
      */
-    protected void ofertarPlanAlquiler(GregorianCalendar fechaInicio, String matricula) {
+    void ofertarPlanAlquiler(GregorianCalendar fechaInicio, String matricula) {
         for (PlanAlquiler pa : planesAlquiler) {
             if (pa.getVehiculo().obtenerMatrícula().equals(matricula) && fechaInicio == pa.getPrimerDiaAlquiler()) {
                 pa.modificarVisibilidad(true);
@@ -283,7 +284,7 @@ class Usuario {
      * @param matricula Matrícula del vehículo
      * @return Instancia de Vehiculo o null, si no existe.
      */
-    protected Vehiculo buscarVehiculo(String matricula) {
+    Vehiculo buscarVehiculo(String matricula) {
         return vehiculos.get(matricula);
     }
 
@@ -318,7 +319,7 @@ class Usuario {
      * @param password Contraseña
      * @return Hash de la contraseña
      */
-    protected String hash(String password) {
+    String hash(String password) {
         return hash(password.toCharArray());
     }
 
@@ -332,7 +333,7 @@ class Usuario {
      * @param password Contraseña
      * @return Hash de la contraseña
      */
-    protected String hash(char[] password) {
+    String hash(char[] password) {
         byte[] salt = new byte[SIZE / 8];
         random.nextBytes(salt);
         byte[] dk = pbkdf2(password, salt, 1 << cost);
@@ -368,7 +369,7 @@ class Usuario {
      * Devuelve si el usuario tiene algún vehículo
      * @return true o false
      */
-    protected boolean tengoVehiculos() {
+    boolean tengoVehiculos() {
         return vehiculos.size() > 0;
     }
 

@@ -24,7 +24,7 @@ public class Vehiculo {
      * @param categoria Categoría del vehículo
      * @param confor Confort del vehículo
      */
-    protected void crear(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoria, String confor) {
+    void crear(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoria, String confor) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
@@ -39,7 +39,7 @@ public class Vehiculo {
      *
      * @return Los datos del Vehiculo en formato imprimible por imprimirLista
      */
-    protected List obtenerDatosVehiculo() {
+    List obtenerDatosVehiculo() {
         List<ArrayList<Object>> datosVehiculo = new ArrayList<>();
         ArrayList<Object> titulos = new ArrayList<>();
         ArrayList<Object> elems = new ArrayList<>();
@@ -70,7 +70,7 @@ public class Vehiculo {
      * @param fechaFin Fecha de fin para evaluación
      * @return true si está disponible y false si no.
      */
-    protected boolean estasDisponible(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
+    boolean estasDisponible(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         boolean disponible = true;
         for (PlanAlquiler pa : planesAlquiler) {
             if ((fechaInicio.after(pa.getPrimerDiaAlquiler()) && fechaInicio.before(pa.getUltimoDiaAlquiler()))
@@ -86,7 +86,7 @@ public class Vehiculo {
      *
      * @param pa PlanAlquiler que asociar.
      */
-    protected void incluirPlanAlquiler(PlanAlquiler pa) {
+    void incluirPlanAlquiler(PlanAlquiler pa) {
         planesAlquiler.add(pa);
     }
 
@@ -96,7 +96,7 @@ public class Vehiculo {
      *
      * @return true si está disponible, false si no
      */
-    protected boolean comprobarEstadoAlquileres() {
+    boolean comprobarEstadoAlquileres() {
         GregorianCalendar fechaActual = new GregorianCalendar();
         boolean estaPillado = true;
         if (planesAlquiler.isEmpty()) {
@@ -115,13 +115,13 @@ public class Vehiculo {
     /**
      * Elimina el vehículo de los alquileres que tenga asociados
      */
-    protected void eliminarVehiculoAlquileres() {
+    void eliminarVehiculoAlquileres() {
         for (PlanAlquiler pa : planesAlquiler) {
             pa.eliminarVehiculo();
         }
     }
 
-    protected String obtenerMatrícula() {
+    String obtenerMatrícula() {
         return matricula;
     }
 
