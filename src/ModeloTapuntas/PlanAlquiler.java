@@ -14,8 +14,8 @@ import java.util.*;
 public class PlanAlquiler {
 
     private boolean visible;
-    private Date primerDiaAlquiler;
-    private Date ultimoDiaAlquiler;
+    private GregorianCalendar primerDiaAlquiler;
+    private GregorianCalendar ultimoDiaAlquiler;
     private double costeAlquilerAlDia;
     private String ciudadRecogida;
     private Vehiculo vehiculo;
@@ -24,11 +24,11 @@ public class PlanAlquiler {
         return visible;
     }
 
-    public Date getPrimerDiaAlquiler() {
+    public GregorianCalendar getPrimerDiaAlquiler() {
         return primerDiaAlquiler;
     }
 
-    public Date getUltimoDiaAlquiler() {
+    public GregorianCalendar getUltimoDiaAlquiler() {
         return ultimoDiaAlquiler;
     }
 
@@ -47,12 +47,12 @@ public class PlanAlquiler {
     protected List obtenerDatosPA() {
         List<Object> datosPA = new ArrayList<>();
         datosPA.add(costeAlquilerAlDia);
-        List<Object> datosVehiculo = new ArrayList<>(vehiculo.obtenerDatosVehículo());
+        List<Object> datosVehiculo = new ArrayList<>(vehiculo.obtenerDatosVehiculo());
         datosPA.add(datosVehiculo);
         return datosPA;
     }
 
-    protected void crear(Vehiculo unVehiculo, Date fechaInicio, Date fechaFin, String ciudadRecogida) {
+    protected void crear(Vehiculo unVehiculo, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) {
         this.vehiculo = unVehiculo;
         this.primerDiaAlquiler = fechaInicio;
         this.ultimoDiaAlquiler = fechaFin;
@@ -64,13 +64,22 @@ public class PlanAlquiler {
     }
 
     protected List obtenerDatosPlanAlquiler() {
-        List<Object> datosPA = new ArrayList<>();
+        List<List<Object>> datosPA = new ArrayList<>();
         String matricula = vehiculo.obtenerMatrícula();
-        datosPA.add(matricula);
-        datosPA.add(primerDiaAlquiler);
-        datosPA.add(ultimoDiaAlquiler);
-        datosPA.add(costeAlquilerAlDia);
-        datosPA.add(ciudadRecogida);
+        ArrayList<Object> titulos = new ArrayList<>();
+        ArrayList<Object> elems = new ArrayList<>();
+        titulos.add("Matrícula");
+        titulos.add("Primer dia alquiler");
+        titulos.add("Ultimo dia alquiler");
+        titulos.add("Coste de alquiler al día");
+        titulos.add("Ciudad de recogida");
+        elems.add(matricula);
+        elems.add(primerDiaAlquiler);
+        elems.add(ultimoDiaAlquiler);
+        elems.add(costeAlquilerAlDia);
+        elems.add(ciudadRecogida);
+        datosPA.add(titulos);
+        datosPA.add(elems);
         return datosPA;
     }
 
@@ -85,7 +94,7 @@ public class PlanAlquiler {
     
     protected boolean vigente()
     {
-        Date fechaActual = new Date();
+        GregorianCalendar fechaActual = new GregorianCalendar();
         return fechaActual.before(this.primerDiaAlquiler);
     }
 }

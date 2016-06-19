@@ -22,7 +22,7 @@ public class Vehiculo {
     private String matricula;
     private ArrayList<PlanAlquiler> planesAlquiler = new ArrayList();
 
-    protected void crear(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoría, String confor) {
+    protected void crear(String matricula, String marca, String modelo, String color, int numeroPlazas, String categoria, String confor) {
         this.matricula = matricula;
         this.marca = marca;
         this.modelo = modelo;
@@ -32,19 +32,30 @@ public class Vehiculo {
         this.confor = confor;
     }
 
-    protected List obtenerDatosVehículo() {
-        List<Object> datosVehiculo = new ArrayList<>();
-        datosVehiculo.add(marca);
-        datosVehiculo.add(modelo);
-        datosVehiculo.add(confor);
-        datosVehiculo.add(numeroPlazas);
-        datosVehiculo.add(color);
-        datosVehiculo.add(categoria);
-        datosVehiculo.add(matricula);
+    protected List obtenerDatosVehiculo() {
+        List<ArrayList<Object>> datosVehiculo = new ArrayList<>();
+        ArrayList<Object> titulos = new ArrayList<>();
+        ArrayList<Object> elems = new ArrayList<>();
+        titulos.add("Marca");
+        titulos.add("Modelo");
+        titulos.add("Confor");
+        titulos.add("Numero de plazas");
+        titulos.add("Color");
+        titulos.add("Categoria");
+        titulos.add("Matricula");
+        elems.add(marca);
+        elems.add(modelo);
+        elems.add(confor);
+        elems.add(numeroPlazas);
+        elems.add(color);
+        elems.add(categoria);
+        elems.add(matricula);
+        datosVehiculo.add(titulos);
+        datosVehiculo.add(elems);
         return datosVehiculo;
     }
 
-    protected boolean estasDisponible(Date fechaInicio, Date fechaFin) {
+    protected boolean estasDisponible(GregorianCalendar fechaInicio, GregorianCalendar fechaFin) {
         boolean disponible = false;
         for(PlanAlquiler pa : planesAlquiler) {
             if((fechaInicio.after(pa.getPrimerDiaAlquiler()) && fechaInicio.before(pa.getUltimoDiaAlquiler())) ||
@@ -59,7 +70,7 @@ public class Vehiculo {
     }
 
     protected boolean comprobarEstadoAlquileres() {
-        Date fechaActual = new Date();
+        GregorianCalendar fechaActual = new GregorianCalendar();
         boolean estaPillado = true;
         for(PlanAlquiler pa : planesAlquiler) {
             if((fechaActual.after(pa.getPrimerDiaAlquiler()) && fechaActual.before(pa.getUltimoDiaAlquiler())) ||

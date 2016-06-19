@@ -10,5 +10,5 @@ package ModeloTapuntas;
  * @author valentin
  */
 public enum TipoTransaccion {
-    
+    TARJETA, TRANSFERENCIA_BANCARIA;
 }
