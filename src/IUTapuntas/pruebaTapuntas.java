@@ -184,7 +184,7 @@ public class pruebaTapuntas {
                         System.out.print("Nombre de Usuario:");
                         nombreUsuario = in.nextLine();
                         List<ArrayList<Object>> vehiculosUsuario = aViajar.obtenerVehiculosUsuario(nombreUsuario);
-                        System.out.println("El usuario " + nombreUsuario + " tiene " + vehiculosUsuario.size() + " vehiculo" + ((vehiculosUsuario.size() > 1) ? "s" : "") + " .");
+                        System.out.println("El usuario " + nombreUsuario + " tiene " + vehiculosUsuario.size() + " vehiculo" + ((vehiculosUsuario.size() > 1) ? "s" : "") + ".");
                         vehiculosUsuario.stream().forEach((vehiculo) -> {
                             imprimirLista(vehiculo, "");
                         });
@@ -327,9 +327,11 @@ public class pruebaTapuntas {
                             System.out.println("No hay ofertas disponibles para las fechas seleccionadas.");
                         } else {
                             System.out.println("Ofertas disponibles:");
-                            System.out.println("----------------------------");
+                            System.out.println("****************************");
                             for (List<Object> oferta : ofertas) {
+                                System.out.println("Ofertas de este usuario:");
                                 for (Object datos : oferta) {
+                                    System.out.println("----------------------------");
                                     if (datos.getClass().equals(ArrayList.class)) {
                                         System.out.println("Coste alquiler:" + ((ArrayList) datos).get(0));
                                         System.out.print("Datos del vehículo:");
@@ -340,6 +342,7 @@ public class pruebaTapuntas {
                                 }
                                 System.out.println("----------------------------");
                             }
+                            System.out.println("****************************");
                         }
 
                         break;
@@ -396,7 +399,8 @@ public class pruebaTapuntas {
         aViajar.introducirPerfil(nombreUsuario, "Antonio Martín Garzón", "658628314", "Soy buena gente.", TipoTransaccion.TARJETA);
         aViajar.añadirVehículo(nombreUsuario, matricula, "Renault", "Megane", "Azul", 5, "Sedán", "Alto");
         aViajar.definirPlanAlquiler(nombreUsuario, matricula, new GregorianCalendar(2016, 5, 20), new GregorianCalendar(2016, 5, 30), "Granada");
-        aViajar.ofertarPlanAlquiler(nombreUsuario, new GregorianCalendar(20, 6, 2016), matricula);
+        aViajar.ofertarPlanAlquiler(nombreUsuario, new GregorianCalendar(20, 5, 2016), matricula);
+        aViajar.definirPlanAlquiler(nombreUsuario, matricula, new GregorianCalendar(2016, 6, 20), new GregorianCalendar(2016, 6, 30), "Granada");
     }
 
 }

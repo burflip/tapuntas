@@ -72,10 +72,14 @@ public class Vehiculo {
     protected boolean comprobarEstadoAlquileres() {
         GregorianCalendar fechaActual = new GregorianCalendar();
         boolean estaPillado = true;
-        for(PlanAlquiler pa : planesAlquiler) {
-            if((fechaActual.after(pa.getPrimerDiaAlquiler()) && fechaActual.before(pa.getUltimoDiaAlquiler())) ||
-                    (fechaActual.before(pa.getPrimerDiaAlquiler()) && pa.poseeAlquileresAceptados()))
-                estaPillado = false;
+        if(planesAlquiler.isEmpty()) {
+            estaPillado = false;
+        } else {
+            for(PlanAlquiler pa : planesAlquiler) {
+                if((fechaActual.after(pa.getPrimerDiaAlquiler()) && fechaActual.before(pa.getUltimoDiaAlquiler())) ||
+                        (fechaActual.before(pa.getPrimerDiaAlquiler()) && pa.poseeAlquileresAceptados()))
+                    estaPillado = false;
+            }
         }
         return estaPillado;
     }
