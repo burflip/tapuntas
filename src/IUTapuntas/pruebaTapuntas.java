@@ -7,6 +7,8 @@ package IUTapuntas;
 
 import ModeloTapuntas.Tapuntas;
 import ModeloTapuntas.TipoTransaccion;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -33,7 +35,7 @@ public class pruebaTapuntas {
          * insertar los datos de prueba
          * ----------------------------------------------------------------------
          */
-        try {
+        /*try {
             insertarDatosDePrueba();
         } catch (Exception ex) {
             System.err.println("Se ha producido la siguiente excepcion: " + ex);
@@ -321,6 +323,8 @@ public class pruebaTapuntas {
                         int añoFinal = (input.equals("")) ? añoInicio : Integer.parseInt(input);
 
                         GregorianCalendar fechaFin = new GregorianCalendar(añoFinal, mesFinal - 1, diaFinal);
+                        DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+                        String fechaString;
 
                         List<List<Object>> ofertas = aViajar.buscarOfertasAlquiler(ciudadRecogida, fechaInicio, fechaFin);
                         if (ofertas.isEmpty()) {
@@ -334,8 +338,12 @@ public class pruebaTapuntas {
                                     System.out.println("----------------------------");
                                     if (datos.getClass().equals(ArrayList.class)) {
                                         System.out.println("Coste alquiler:" + ((ArrayList) datos).get(0));
+                                        fechaString = formatoFecha.format(((GregorianCalendar) ((ArrayList) datos).get(1)).getTime());
+                                        System.out.print("Fecha inicio Alquiler:" + fechaString);
+                                        fechaString = formatoFecha.format(((GregorianCalendar) ((ArrayList) datos).get(2)).getTime());
+                                        System.out.print("Fecha inicio Alquiler:" + fechaString);
                                         System.out.print("Datos del vehículo:");
-                                        imprimirLista((ArrayList<Object>) ((ArrayList) datos).get(1));
+                                        imprimirLista((ArrayList<Object>) ((ArrayList) datos).get(3));
                                     } else {
                                         System.out.println(datos);
                                     }
@@ -363,10 +371,22 @@ public class pruebaTapuntas {
         System.exit(0);
     }
 
+    /**
+     * Overload de imprimirLista, para que no haga falta poner el título
+     *
+     * @param lista Lista en formato compatible para impresión
+     */
     private static void imprimirLista(List lista) {
         imprimirLista(lista, "");
     }
 
+    /**
+     * Imprimir una lista de objetos. Formato compatible: List[ List[titulos :
+     * String], List[elementos : Object]]
+     *
+     * @param lista Lista a imprimir
+     * @param titulo Título que se quiere imprimir junto con la lista
+     */
     private static void imprimirLista(List lista, String titulo) {
         Iterator it_titulos = ((ArrayList<Object>) lista.get(0)).iterator();
         Iterator it_elems = ((ArrayList<Object>) lista.get(1)).iterator();
@@ -382,6 +402,12 @@ public class pruebaTapuntas {
         System.out.println("-------------" + slices + "---------------");
     }
 
+    /**
+     * Imprime una lista de las matrículas de un usaurio para mejorar la
+     * experiencia de usuario.
+     *
+     * @param nombreUsuario Usuario en cuestión
+     */
     private static void imprimirMatriculasUsuario(String nombreUsuario) {
         Tapuntas aViajar = Tapuntas.getInstance();
         ArrayList<String> matriculas = new ArrayList<>(aViajar.obtenerMatriculasUsuario(nombreUsuario));
@@ -392,6 +418,10 @@ public class pruebaTapuntas {
         System.out.println("----------------------------");
     }
 
+    /**
+     * Inserta los datos de prueba para aligerarla depuración
+     * @throws Exception 
+     */
     private static void insertarDatosDePrueba() throws Exception {
         Tapuntas aViajar = Tapuntas.getInstance();
         String nombreUsuario = "antony", matricula = "6458HVN";

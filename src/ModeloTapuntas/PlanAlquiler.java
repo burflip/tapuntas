@@ -46,14 +46,31 @@ public class PlanAlquiler {
         return vehiculo;
     }
 
+    /**
+     * Devuelve los datos del PlanAlquiler. He añadido primer y último día de
+     * alquiler para saber de cuándo es cada uno.
+     *
+     * @return Los datos del Plan de Alquiler en formato imprimible por
+     * imprimirLista
+     */
     protected List obtenerDatosPA() {
         List<Object> datosPA = new ArrayList<>();
         datosPA.add(costeAlquilerAlDia);
+        datosPA.add(primerDiaAlquiler);
+        datosPA.add(ultimoDiaAlquiler);
         List<Object> datosVehiculo = new ArrayList<>(vehiculo.obtenerDatosVehiculo());
         datosPA.add(datosVehiculo);
         return datosPA;
     }
 
+    /**
+     * Crea un nuevo plan de alquiler
+     *
+     * @param unVehiculo Vehiculo asociado
+     * @param fechaInicio Fecha de inicio del plan
+     * @param fechaFin Fecha de fin del plan
+     * @param ciudadRecogida Ciudad de recogida del plan
+     */
     protected void crear(Vehiculo unVehiculo, GregorianCalendar fechaInicio, GregorianCalendar fechaFin, String ciudadRecogida) {
         this.vehiculo = unVehiculo;
         this.primerDiaAlquiler = fechaInicio;
@@ -61,10 +78,19 @@ public class PlanAlquiler {
         this.ciudadRecogida = ciudadRecogida;
     }
 
+    /**
+     * Elimina el vehículo del plan
+     */
     protected void eliminarVehiculo() {
         this.vehiculo = null;
     }
 
+    /**
+     * Devuelve los datos completos del PlanAlquiler.
+     *
+     * @return Los datos del Plan de Alquiler en formato imprimible por
+     * imprimirLista
+     */
     protected List obtenerDatosPlanAlquiler() {
         List<List<Object>> datosPA = new ArrayList<>();
         String matricula = vehiculo.obtenerMatrícula();
@@ -88,17 +114,32 @@ public class PlanAlquiler {
         return datosPA;
     }
 
+    /**
+     * Hace un Plan de Alquiler visible o invisible
+     *
+     * @param visible Si queremos que sea visible true e invisible false
+     */
     protected void modificarVisibilidad(boolean visible) {
         this.visible = visible;
     }
-    
-    protected boolean poseeAlquileresAceptados()
-    {
+
+    /**
+     * Esta función no está implementada pues depende de la clase Alquiler que
+     * no está definida en esta iteración del diseño.
+     *
+     * @return false
+     */
+    protected boolean poseeAlquileresAceptados() {
         return false;
     }
-    
-    protected boolean vigente()
-    {
+
+    /**
+     * Devuelve true si el plan está vigente. La condición de vigencia es que el
+     * la fechaInicio del plan sea > a la fecha de hoy.
+     *
+     * @return true si aún está vigente y false si no
+     */
+    protected boolean vigente() {
         DateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); //Da formato al día String
         String fechaString = formatoFecha.format(this.ultimoDiaAlquiler.getTime());
         GregorianCalendar fechaActual = new GregorianCalendar();
